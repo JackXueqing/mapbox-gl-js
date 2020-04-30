@@ -15,7 +15,7 @@
 <div id='map'></div>
 
 <script src='../dist/mapbox-gl-dev.js'></script>
-<script src='access_token_generated.js'></script>
+<script src='../debug/access_token_generated.js'></script>
 <script>
 
 var map = window.map = new mapboxgl.Map({
@@ -27,7 +27,7 @@ var map = window.map = new mapboxgl.Map({
     hash: true
 });
 
-map.addControl(new mapboxgl.ScaleControl({ unit: 'nautical' }));
+map.addControl(new mapboxgl.ScaleControl({unit: 'nautical'}));
 
 </script>
 </body>

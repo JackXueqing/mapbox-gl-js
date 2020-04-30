@@ -4,20 +4,28 @@ import {RGBAImage} from '../util/image';
 
 import type Map from '../ui/map';
 
-export type StyleImage = {
+export type StyleImageData = {
     data: RGBAImage,
-    pixelRatio: number,
-    sdf: boolean,
     version: number,
     hasRenderCallback?: boolean,
     userImage?: StyleImageInterface
 };
 
+export type StyleImageMetadata = {
+    pixelRatio: number,
+    sdf: boolean,
+    stretchX?: Array<[number, number]>,
+    stretchY?: Array<[number, number]>,
+    content?: [number, number, number, number]
+};
+
+export type StyleImage = StyleImageData & StyleImageMetadata;
+
 export type StyleImageInterface = {
     width: number,
     height: number,
     data: Uint8Array | Uint8ClampedArray,
-    render?: () => void,
+    render?: () => boolean,
     onAdd?: (map: Map, id: string) => void,
     onRemove?: () => void
 };

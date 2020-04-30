@@ -1,4 +1,4 @@
-import { test } from '../../../util/test';
+import {test} from '../../../util/test';
 import browser from '../../../../src/util/browser';
 import window from '../../../../src/util/window';
 import Map from '../../../../src/ui/map';
@@ -7,8 +7,11 @@ import simulate from '../../../util/simulate_interaction';
 
 function createMap(t) {
     t.stub(Map.prototype, '_detectMissingCSS');
-    return new Map({ container: DOM.create('div', '', window.document.body) });
+    return new Map({container: DOM.create('div', '', window.document.body)});
 }
+
+// MouseEvent.buttons
+const buttons = 1;
 
 test('Map#isMoving returns false by default', (t) => {
     const map = createMap(t);
@@ -30,7 +33,7 @@ test('Map#isMoving returns true during a camera zoom animation', (t) => {
         t.end();
     });
 
-    map.zoomTo(5, { duration: 0 });
+    map.zoomTo(5, {duration: 0});
 });
 
 test('Map#isMoving returns true when drag panning', (t) => {
@@ -49,7 +52,7 @@ test('Map#isMoving returns true when drag panning', (t) => {
     simulate.mousedown(map.getCanvas());
     map._renderTaskQueue.run();
 
-    simulate.mousemove(map.getCanvas(), {clientX: 10, clientY: 10});
+    simulate.mousemove(map.getCanvas(), {buttons, clientX: 10, clientY: 10});
     map._renderTaskQueue.run();
 
     simulate.mouseup(map.getCanvas());
@@ -103,7 +106,9 @@ test('Map#isMoving returns true when scroll zooming', (t) => {
     map._renderTaskQueue.run();
 
     now += 400;
-    map._renderTaskQueue.run();
+    setTimeout(() => {
+        map._renderTaskQueue.run();
+    }, 400);
 });
 
 test('Map#isMoving returns true when drag panning and scroll zooming interleave', (t) => {
@@ -120,7 +125,9 @@ test('Map#isMoving returns true when drag panning and scroll zooming interleave'
     map.on('zoomend', () => {
         t.equal(map.isMoving(), true);
         simulate.mouseup(map.getCanvas());
-        map._renderTaskQueue.run();
+        setTimeout(() => {
+            map._renderTaskQueue.run();
+        });
     });
 
     map.on('dragend', () => {
@@ -135,7 +142,7 @@ test('Map#isMoving returns true when drag panning and scroll zooming interleave'
     simulate.mousedown(map.getCanvas());
     map._renderTaskQueue.run();
 
-    simulate.mousemove(map.getCanvas(), {clientX: 10, clientY: 10});
+    simulate.mousemove(map.getCanvas(), {buttons, clientX: 10, clientY: 10});
     map._renderTaskQueue.run();
 
     const browserNow = t.stub(browser, 'now');
@@ -146,5 +153,7 @@ test('Map#isMoving returns true when drag panning and scroll zooming interleave'
     map._renderTaskQueue.run();
 
     now += 400;
-    map._renderTaskQueue.run();
+    setTimeout(() => {
+        map._renderTaskQueue.run();
+    }, 400);
 });
